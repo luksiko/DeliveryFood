@@ -32,7 +32,7 @@ let login = localStorage.getItem('gloDelivery');
 
 function toggleModalAuth() {
   modalAuth.classList.toggle('is-open');
-  loginInput.style.backgroundColor = '';
+  loginInput.style.borderColor = '';
 }
 
 function authorized() {
@@ -56,6 +56,9 @@ function authorized() {
   buttonOut.addEventListener('click', logOut);
 }
 
+function maskInput(string) {
+  return !!string.trim();
+}
 function notAuthorized() {
   console.log("Не авторизован");
 
@@ -63,7 +66,7 @@ function notAuthorized() {
     event.preventDefault();
     loginInput.style.backgroundColor = '';
 
-    if (loginInput.value) {
+    if (maskInput(loginInput.value.trim())) {
       login = loginInput.value;
       localStorage.setItem('gloDelivery', login);
       toggleModalAuth();
@@ -73,7 +76,7 @@ function notAuthorized() {
       logInForm.reset(); //* сбрасывает поля ввода
       checkAuth();
     } else {
-      loginInput.style.backgroundColor = 'pink';
+      loginInput.style.borderColor = 'pink';
     }
   }
 
