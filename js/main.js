@@ -33,6 +33,8 @@ let login = localStorage.getItem('gloDelivery');
 function toggleModalAuth() {
   modalAuth.classList.toggle('is-open');
   loginInput.style.borderColor = '';
+  passwordInput.style.borderColor = '';
+
 }
 
 function authorized() {
@@ -59,6 +61,7 @@ function authorized() {
 function maskInput(string) {
   return !!string.trim();
 }
+
 function notAuthorized() {
   console.log("Не авторизован");
 
@@ -66,7 +69,7 @@ function notAuthorized() {
     event.preventDefault();
     loginInput.style.backgroundColor = '';
 
-    if (maskInput(loginInput.value.trim())) {
+    if (maskInput(loginInput.value.trim() && passwordInput.value.trim())) {
       login = loginInput.value;
       localStorage.setItem('gloDelivery', login);
       toggleModalAuth();
@@ -77,6 +80,8 @@ function notAuthorized() {
       checkAuth();
     } else {
       loginInput.style.borderColor = 'pink';
+      passwordInput.style.borderColor = 'pink';
+
     }
   }
 
@@ -84,8 +89,8 @@ function notAuthorized() {
   closeAuth.addEventListener('click', toggleModalAuth);
   logInForm.addEventListener('submit', logIn);
   // buttonLogin.disabled = true;
-  // checkInput(loginInput);
-  // checkInput(passwordInput);
+  checkInput(loginInput);
+  checkInput(passwordInput);
 }
 
 function checkAuth() {
@@ -95,26 +100,20 @@ function checkAuth() {
     notAuthorized();
   }
 }
-/* 
-function checkInput(a) {
-  if (a.value == '') {
-    a.addEventListener('blur', function () {
-      a.style.backgroundColor = 'pink';
-      console.log("Вы не ввели логин/пароль");
 
-      a.addEventListener('input', function () {
-        if (a.value == '') {
-          a.style.backgroundColor = 'pink';
-        }
-        a.style.backgroundColor = '';
-        buttonLogin.disabled = false;
-      });
-    });
-  } else {
-    // a.style.backgroundColor = '';
-    // buttonLogin.disabled = false;
-  }
-} */
+function checkInput(a) {
+  a.addEventListener('blur', function () {
+    if (!maskInput(a.value.trim())) {
+      a.style.borderColor = 'pink';
+      console.log("Вы не ввели логин/пароль");
+    }
+  });
+  a.addEventListener('input', function () {
+    if (a.value == '') {
+      a.style.borderColor = 'pink';
+    }
+  });
+}
 
 // checkInput();
 
