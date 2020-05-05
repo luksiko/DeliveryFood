@@ -109,8 +109,10 @@ function checkInput(a) {
     }
   });
   a.addEventListener('input', function () {
-    if (a.value == '') {
+    if (!maskInput(a.value.trim())) {
       a.style.borderColor = 'pink';
+    } else {
+      a.style.borderColor = '';
     }
   });
 }
