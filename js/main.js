@@ -106,6 +106,7 @@ const error = `
 modalFooter.insertAdjacentHTML('beforebegin', error)
 let errorMsg = document.querySelector('.error');
 
+//* проверка на введеные символы у login input 
 function checkInput(a) {
   a.addEventListener('blur', function () {
     if (!maskInput(a.value.trim())) {
@@ -124,7 +125,7 @@ function checkInput(a) {
   });
 }
 
-
+//* создание карточек ресторанов из одной 
 function createCardsRestaurants() {
 
   const card = `
@@ -149,7 +150,7 @@ function createCardsRestaurants() {
   cardsRestaurants.insertAdjacentHTML('beforeend', card); //! лучше чем innerHTML. не переводит в строку и потом обратоно в обьект
 
 }
-
+//* создание карточек товаров
 function createCardGood() {
   const card = document.createElement('div');
   card.className = 'card';
