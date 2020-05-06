@@ -88,7 +88,6 @@ function notAuthorized() {
   buttonAuth.addEventListener('click', toggleModalAuth);
   closeAuth.addEventListener('click', toggleModalAuth);
   logInForm.addEventListener('submit', logIn);
-  // buttonLogin.disabled = true;
   checkInput(loginInput);
   checkInput(passwordInput);
 }
@@ -118,7 +117,6 @@ function checkInput(a) {
   });
 }
 
-checkAuth();
 
 function createCardsRestaurants() {
 
@@ -144,13 +142,6 @@ function createCardsRestaurants() {
   cardsRestaurants.insertAdjacentHTML('beforeend', card); //! лучше чем innerHTML. не переводит в строку и потом обратоно в обьект
 
 }
-
-createCardsRestaurants();
-createCardsRestaurants();
-createCardsRestaurants();
-createCardsRestaurants();
-createCardsRestaurants();
-createCardsRestaurants();
 
 function createCardGood() {
   const card = document.createElement('div');
@@ -180,12 +171,11 @@ function createCardGood() {
 
 function openGoods(event) {
 
-
   const target = event.target,
     restaurant = target.closest('.card-restaurant'); //* ищет ближайшее упомянание селектора
   // console.dir(target.parentElement); //* можно обращаться к свойствам и искать нужные значения через консоль
 
-  if (restaurant) {
+  if (restaurant && login) {
     cardsMenu.textContent = ''; //! ошищение блока перед добавлением, чтобы не дублировались
     containerPromo.classList.add('hide');
     restaurants.classList.add('hide');
@@ -194,6 +184,8 @@ function openGoods(event) {
     createCardGood();
     createCardGood();
     createCardGood();
+  } else {
+    toggleModalAuth();
   }
 
 }
@@ -208,4 +200,13 @@ logo.addEventListener('click', function () {
   containerPromo.classList.remove('hide');
   restaurants.classList.remove('hide');
   menu.classList.add('hide');
-})
+});
+
+checkAuth();
+
+createCardsRestaurants();
+createCardsRestaurants();
+createCardsRestaurants();
+createCardsRestaurants();
+createCardsRestaurants();
+createCardsRestaurants();
