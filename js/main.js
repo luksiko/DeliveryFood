@@ -100,6 +100,11 @@ function checkAuth() {
   }
 }
 
+const error = `
+<div class="error" style="display: none;">Пицца плюс</div>  
+`;
+modalFooter.insertAdjacentHTML('beforebegin', error)
+
 function checkInput(a) {
   a.addEventListener('blur', function () {
     if (!maskInput(a.value.trim())) {
@@ -110,7 +115,6 @@ function checkInput(a) {
   a.addEventListener('input', function () {
     if (!maskInput(a.value.trim())) {
       a.style.borderColor = 'pink';
-      a.textContent = 'Введите Логин';
     } else {
       a.style.borderColor = '';
     }
@@ -184,10 +188,10 @@ function openGoods(event) {
     createCardGood();
     createCardGood();
     createCardGood();
+
   } else {
     toggleModalAuth();
   }
-
 }
 
 cartButton.addEventListener("click", toggleModal);
