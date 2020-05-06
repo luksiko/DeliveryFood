@@ -101,22 +101,27 @@ function checkAuth() {
 }
 
 const error = `
-<div class="error" style="display: none;">Вы не ввели логин/пароль</div>  
+<div class="error" style="display: none;color: #ff0202">Вы не ввели логин/пароль</div>  
 `;
 modalFooter.insertAdjacentHTML('beforebegin', error)
+let errorMsg = document.querySelector('.error');
 
 function checkInput(a) {
   a.addEventListener('blur', function () {
     if (!maskInput(a.value.trim())) {
       a.style.borderColor = 'pink';
-      console.log("Вы не ввели логин/пароль");
+      // console.log("Вы не ввели логин/пароль");
+      errorMsg.style.display = 'block';
     }
+
   });
   a.addEventListener('input', function () {
     if (!maskInput(a.value.trim())) {
       a.style.borderColor = 'pink';
     } else {
       a.style.borderColor = '';
+      errorMsg.style.display = 'none';
+
     }
   });
 }
