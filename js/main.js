@@ -101,7 +101,7 @@ function checkAuth() {
 }
 
 const error = `
-<div class="error" style="display: none;">Пицца плюс</div>  
+<div class="error" style="display: none;">Вы не ввели логин/пароль</div>  
 `;
 modalFooter.insertAdjacentHTML('beforebegin', error)
 
