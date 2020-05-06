@@ -110,7 +110,6 @@ function checkInput(a) {
   a.addEventListener('blur', function () {
     if (!maskInput(a.value.trim())) {
       a.style.borderColor = 'pink';
-      // console.log("Вы не ввели логин/пароль");
       errorMsg.style.display = 'block';
     }
 
@@ -121,7 +120,6 @@ function checkInput(a) {
     } else {
       a.style.borderColor = '';
       errorMsg.style.display = 'none';
-
     }
   });
 }
