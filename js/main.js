@@ -281,10 +281,10 @@ function init() {
 
   checkAuth();
 
-  /*   new Swiper('.swiper-container', {
+    new Swiper('.swiper-container', {
       loop: true,
       autoplay: true,
-    }); */
+    });
 }
 
 init();
