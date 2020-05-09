@@ -20,7 +20,7 @@ const buttonAuth = document.querySelector('.button-auth'),
   logo = document.querySelector('.logo'),
   cardsMenu = document.querySelector('.cards-menu'),
   cardRest = document.querySelector('.card-restaurant'),
-  restaurantTitle = document.querySelector('.card-restaurant'),
+  restaurantTitle = document.querySelector('.restaurant-title'),
   rating = document.querySelector('.rating'),
   category = document.querySelector('.category'),
   minPrice = document.querySelector('.price'),
@@ -206,7 +206,8 @@ function createCardGood({
   description,
   image,
   name,
-  price
+  price,
+  id
 }) { //* есть возможность заисать так а не как выше у
 
   const card = document.createElement('div');
@@ -221,7 +222,7 @@ function createCardGood({
           <div class="ingredients">${description}</div>
         </div>
         <div class="card-buttons">
-          <button class="button button-primary button-add-cart">
+          <button class="button button-primary button-add-cart" id="${id}">
             <span class="button-card-text">В корзину</span>
             <span class="button-cart-svg"></span>
           </button>
@@ -258,7 +259,7 @@ function openGoods(event) {
       const [name, stars, kitchen, price] = restaurant.info; //присваиваем каджому элементу имя
 
       // ! 1) вариант - добавляет элементы уже в вёрстку.
-      // restaurantTitle.textContent = name;
+      restaurantTitle.textContent = name;
       rating.textContent = stars;
       category.textContent = kitchen;
       minPrice.textContent = `От ${price} ₽`;
@@ -287,13 +288,15 @@ function openGoods(event) {
 function addToCart(event) {
   const target = event.target;
   const buttonAddToCart = target.closest('.button-add-cart');
-console.log(buttonAddToCart);
-if(buttonAddToCart){
-  const cart = target.closest('.cart');
-  const title = cart.querySelector('.card-title-reg');
-  const coast = cart.querySelector('.card-price');
+
+  if (buttonAddToCart) {
+    const cart = target.closest('.card');
+    const title = cart.querySelector('.card-title-reg');
+    const coast = cart.querySelector('.card-price');
+    const id = buttonAddToCart.id;
+    console.log(title, coast, id);
+  }
 }
-};
 
 function init() {
   getData('../db/partners.json').then(function (data) {
@@ -302,7 +305,7 @@ function init() {
 
   cartButton.addEventListener("click", toggleModal);
 
-  cardsMenu.addEventListener('click', addToCart)
+  cardsMenu.addEventListener('click', addToCart);
 
   close.addEventListener("click", toggleModal);
 
