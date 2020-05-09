@@ -27,6 +27,7 @@ const buttonAuth = document.querySelector('.button-auth'),
 	inputSearch = document.querySelector('.input-search'),
 	modalBody = document.querySelector('.modal-body'),
 	modalPricetag = document.querySelector('.modal-pricetag'),
+	buttonСlearСart = document.querySelector('.clear-cart'),
 	cart = [];
 
 
@@ -350,16 +351,16 @@ function changeCount(event) {
 	const target = event.target;
 
 	if (target.classList.contains('counter-button')) {
-
 		const food = cart.find(function (item) {
 			return item.id === target.dataset.id;
 		});
 		if (target.classList.contains('counter-minus')) {
 			food.count--;
+			if (food.count === 0) {
+				cart.splice(cart.indexOf(food), 1);
+			}
 		}
-		if (target.classList.contains('counter-plus')) {
-			food.count++;
-		}
+		if (target.classList.contains('counter-plus')) food.count++;
 		renderCart();
 	}
 
@@ -376,7 +377,12 @@ function init() {
 
 	});
 
-	modalBody.addEventListener('click', changeCount());
+	buttonСlearСart.addEventListener('click', function() {
+		cart.length = 0;
+		renderCart();
+	});
+	
+	modalBody.addEventListener('click', changeCount);
 
 	cardsMenu.addEventListener('click', addToCart);
 
@@ -392,9 +398,9 @@ function init() {
 			const target = event.target;
 
 			const value = target.value.toLowerCase().trim();
-			
+
 			target.value = '';
-			
+
 			if (!value || value.length < 3) {
 				target.style.backgroundColor = 'tomato';
 				setTimeout(function () {
@@ -402,8 +408,8 @@ function init() {
 				}, 2000);
 				return;
 			}
-			
-			
+
+
 			const goods = [];
 
 			getData('./db/partners.json')
