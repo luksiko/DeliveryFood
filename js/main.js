@@ -1,7 +1,7 @@
 'use strict';
 
 const buttonAuth = document.querySelector('.button-auth'),
-  cartButton = document.querySelector("#cart-button"),
+  cartButton = document.getElementById("cart-button"),
   modal = document.querySelector(".modal"),
   close = document.querySelector(".close"),
   buttonOut = document.querySelector('.button-out'),
@@ -9,9 +9,9 @@ const buttonAuth = document.querySelector('.button-auth'),
   modalAuth = document.querySelector('.modal-auth'),
   modalFooter = document.querySelector('#logInForm .modal-footer'),
   closeAuth = document.querySelector('.close-auth'),
-  logInForm = document.querySelector('#logInForm'),
+  logInForm = document.getElementById('logInForm'),
   loginInput = document.querySelector('#login'),
-  passwordInput = document.querySelector('#password'),
+  passwordInput = document.getElementById('password'),
   userName = document.querySelector('.user-name'),
   cardsRestaurants = document.querySelector('.cards-restaurants'),
   containerPromo = document.querySelector('.container-promo'),
@@ -19,15 +19,22 @@ const buttonAuth = document.querySelector('.button-auth'),
   menu = document.querySelector('.menu'),
   logo = document.querySelector('.logo'),
   cardsMenu = document.querySelector('.cards-menu'),
-  cardRest = document.querySelector('.card-restaurant');
+  cardRest = document.querySelector('.card-restaurant'),
+  restaurantTitle = document.querySelector('.card-restaurant'),
+  rating = document.querySelector('.rating'),
+  category = document.querySelector('.category'),
+  minPrice = document.querySelector('.price'),
+  inputSearch = document.querySelector('.input-search');
 
 
 let cardHeader = document.querySelector('.card-header');
 
 let login = localStorage.getItem('gloDelivery');
 
+const cart = [];
+
 const getData = async function (url) {
-  const response = await fetch(url);
+  const response = await window.fetch(url);
   if (!response.ok) { //! в любом случае выдавать ответ
     throw new Error(`Ошибка по адресу ${url}, статус ошибки ${response.status}!`)
   }
@@ -72,6 +79,7 @@ function authorized() {
     buttonAuth.style.display = '';
     buttonOut.style.display = '';
     userName.style.display = '';
+    cartButton.style.display = '';
     buttonOut.removeEventListener('click', logOut);
     checkAuth();
     returnMain();
@@ -82,7 +90,8 @@ function authorized() {
   userName.textContent = login;
   buttonAuth.style.display = 'none';
   buttonOut.style.display = 'inline';
-  userName.style.display = 'block';
+  userName.style.display = 'flex';
+  cartButton.style.display = 'flex';
   buttonOut.addEventListener('click', logOut);
 }
 
@@ -166,15 +175,13 @@ function createCardsRestaurants(restaurant) {
     stars,
     time_of_delivery: timeOfDelivery
   } = restaurant;
+  const card = document.createElement('a');
+  card.className = 'card card-restaurant';
+  card.products = products;
+  card.info = [kitchen, name, price, stars];
 
-  const card = `
-  <a class="card card-restaurant" 
-  data-products="${products}" 
-  data-name="${name}"
-  data-stars="${stars}"
-  data-kitchen="${kitchen}"
-  data-price="${price}">
-    <img src="${image}" alt="image" class="card-image"/>
+  card.insertAdjacentHTML('beforeend', `
+    <img src="${image}" alt="${name}" class="card-image"/>
     <div class="card-text">
       <div class="card-heading">
         <h3 class="card-title">${name}</h3>
@@ -188,16 +195,15 @@ function createCardsRestaurants(restaurant) {
         <div class="category">${kitchen}</div>
       </div>
     </div>
-  </a>
-`;
-  cardsRestaurants.insertAdjacentHTML('beforeend', card); //! лучше чем innerHTML. не переводит в строку и потом обратоно в обьект
+`);
+
+  cardsRestaurants.insertAdjacentElement('beforeend', card); //! лучше чем innerHTML. не переводит в строку и потом обратоно в обьект
 }
 
 //* создание карточек товаров
 
 function createCardGood({
   description,
-  id,
   image,
   name,
   price
@@ -206,7 +212,7 @@ function createCardGood({
   const card = document.createElement('div');
   card.className = 'card';
   card.insertAdjacentHTML('beforeend', `
-      <img src="${image}" alt="image" class="card-image"/>
+      <img src="${image}" alt="${name}" class="card-image"/>
       <div class="card-text">
         <div class="card-heading">
           <h3 class="card-title card-title-reg">${name}</h3>
@@ -219,7 +225,7 @@ function createCardGood({
             <span class="button-card-text">В корзину</span>
             <span class="button-cart-svg"></span>
           </button>
-          <strong class="card-price-bold">${price} ₽</strong>
+          <strong class="card-price card-price-bold">${price} ₽</strong>
         </div>
       </div>
   `);
@@ -228,43 +234,66 @@ function createCardGood({
 
 //* есть возможность заисать так а не как выше у
 
-
+// открывает меню ресторана
 function openGoods(event) {
+  if (login) {
 
-  const target = event.target,
-    restaurant = target.closest('.card-restaurant'); //* ищет ближайшее упомянание селектора
-  // console.dir(target.parentElement); //* можно обращаться к свойствам и искать нужные значения через консоль
+    const target = event.target,
+      restaurant = target.closest('.card-restaurant'); //* ищет ближайшее упомянание селектора
+    // console.dir(target.parentElement); //* можно обращаться к свойствам и искать нужные значения через консоль
 
-  if (restaurant && login) {
-    console.log(restaurant.dataset.products);
-    console.log(restaurant.dataset.name);
+    if (restaurant) {
+      //   console.log(restaurant.dataset.products);
+      //   console.log(restaurant.dataset.name);
+      cardsMenu.textContent = ''; //! ошищение блока перед добавлением, чтобы не дублировались
+      containerPromo.classList.add('hide');
+      restaurants.classList.add('hide');
+      menu.classList.remove('hide');
 
-    cardsMenu.textContent = ''; //! ошищение блока перед добавлением, чтобы не дублировались
-    containerPromo.classList.add('hide');
-    restaurants.classList.add('hide');
-    menu.classList.remove('hide');
-    getData(`../db/${restaurant.dataset.products}`).then(function (data) {
-      data.forEach(createCardGood);
-    });
 
-//* добавляем блок хедера карточек в ресторане обращаясь к dataset в 
+      //* добавляем блок хедера карточек в ресторане обращаясь к dataset в Day3 homeWork
 
-    cardHeader.insertAdjacentHTML('beforeend', `
-        <h2 class="section-title restaurant-title">${restaurant.dataset.name}</h2>
-        <div class="card-info">
-          <div class="rating">
-          ${restaurant.dataset.stars}
-          </div>
-          <div class="price">От ${restaurant.dataset.price} ₽</div>
-          <div class="category">${restaurant.dataset.kitchen}</div>
-        </div>
-  `);
+      // const info = restaurant.dataset.info.split(','); //разбиваем массив
 
+      const [name, stars, kitchen, price] = restaurant.info; //присваиваем каджому элементу имя
+
+      // ! 1) вариант - добавляет элементы уже в вёрстку.
+      // restaurantTitle.textContent = name;
+      rating.textContent = stars;
+      category.textContent = kitchen;
+      minPrice.textContent = `От ${price} ₽`;
+
+      getData(`../db/${restaurant.products}`).then(function (data) {
+        data.forEach(createCardGood);
+      });
+      // ! 2) мой вариант - создает карточкку хедера
+
+      /*       cardHeader.insertAdjacentHTML('beforeend', `
+              <h2 class="section-title restaurant-title">${name}</h2>
+              <div class="card-info">
+                <div class="rating">
+                ${stars}
+                </div>
+                <div class="price">От ${price} ₽</div>
+                <div class="category">${kitchen}</div>
+              </div>
+        `); */
+    }
   } else {
     toggleModalAuth();
   }
 }
 
+function addToCart(event) {
+  const target = event.target;
+  const buttonAddToCart = target.closest('.button-add-cart');
+console.log(buttonAddToCart);
+if(buttonAddToCart){
+  const cart = target.closest('.cart');
+  const title = cart.querySelector('.card-title-reg');
+  const coast = cart.querySelector('.card-price');
+}
+};
 
 function init() {
   getData('../db/partners.json').then(function (data) {
@@ -273,18 +302,82 @@ function init() {
 
   cartButton.addEventListener("click", toggleModal);
 
+  cardsMenu.addEventListener('click', addToCart)
+
   close.addEventListener("click", toggleModal);
 
   cardsRestaurants.addEventListener('click', openGoods);
 
   logo.addEventListener('click', returnMain);
 
+  inputSearch.addEventListener('keydown', function (event) {
+    if (event.keyCode === 13) {
+      const target = event.target;
+      const value = target.value.toLowerCase().trim();
+      const goods = [];
+
+      target.value = '';
+
+      if (!value || value.length < 3) {
+        target.style.backgroundColor = 'tomato';
+        setTimeout(function () {
+          target.style.backgroundColor = '';
+        }, 2000);
+        return;
+      }
+
+
+
+      getData('./db/partners.json')
+        .then(function (data) {
+
+          const products = data.map(function (item) {
+            return item.products;
+          }); //* этот метод возвращает каждую итерацию
+
+          products.forEach(function (product) {
+            getData(`../db/${products}`)
+              .then(function (data) {
+
+                goods.push(...data);
+
+                const searchGoods = goods.filter(function (item) {
+                  return item.name.toLowerCase().includes(value);
+                });
+
+                console.log(searchGoods);
+
+
+                cardsMenu.textContent = '';
+
+                containerPromo.classList.add('hide');
+                restaurants.classList.add('hide');
+                menu.classList.remove('hide');
+
+                restaurantTitle.textContent = 'Результат поиска';
+                rating.textContent = '';
+                category.textContent = '';
+                minPrice.textContent = '';
+
+                return searchGoods;
+
+              })
+              .then(function (data) {
+                data.forEach(createCardGood);
+              });
+
+          });
+
+        });
+    }
+  });
+
   checkAuth();
 
-    new Swiper('.swiper-container', {
-      loop: true,
-      autoplay: true,
-    });
+  // new Swiper('.swiper-container', {
+  //   loop: true,
+  //   autoplay: true,
+  // });
 }
 
 init();
