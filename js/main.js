@@ -36,12 +36,12 @@ let login = localStorage.getItem('gloDelivery');
 //*получаем данные из localStorage либо пишем пустой массив
 // const cart = JSON.parse(localStorage.getItem(login)) || [];
 
-const saveCart = function () {
+const saveCart = () => { //! лямбда функции
    localStorage.setItem(login, JSON.stringify(cart));
 };
-const loadCart = function () {
+const loadCart = () => {
    if (localStorage.getItem(login)) {
-      JSON.parse(localStorage.getItem(login)).forEach(function (item) {
+      JSON.parse(localStorage.getItem(login)).forEach((item) => {
          cart.push(item);
       });
    }
@@ -56,9 +56,9 @@ const getData = async function (url) {
 };
 
 
-// modalAuth.classList.add('hello'); //* свойства функции classList
-// modalAuth.classList.remove('modal-auth'); //*
-// modalAuth.classList.toggle('modal-auth'); //*
+// modalAuth.classList.add('hello');   //* свойства функции classList
+// modalAuth.classList.remove('modal-auth');          //*
+// modalAuth.classList.toggle('modal-auth');          //*
 // console.log(modalAuth.classList.contains('hello'));//*
 
 const valid = function (str) {
@@ -145,13 +145,15 @@ function notAuthorized() {
 
 }
 
-function checkAuth() {
+const checkAuth = () => login ? authorized() : notAuthorized();
+
+/* const checkAuth() {
    if (login) {
       authorized();
    } else {
       notAuthorized();
    }
-}
+} */
 
 let error = `
 <div class="error" style="display: none;color: #ff0202">Неверная пара логин/пароль</div>  
@@ -278,9 +280,8 @@ function openGoods(event) {
          			category.textContent = kitchen;
          			minPrice.textContent = `От ${price} ₽`; */
 
-         getData(`../db/${restaurant.products}`).then(function (data) {
-            data.forEach(createCardGood);
-         });
+         getData(`../db/${restaurant.products}`)
+         .then(data => data.forEach(createCardGood));
          // ! 2) мой вариант - создает карточкку хедера
 
          cardHeader.insertAdjacentHTML('beforeend', `
@@ -382,7 +383,6 @@ function init() {
    cartButton.addEventListener("click", function () {
       renderCart();
       toggleModal();
-
    });
 
    buttonСlearСart.addEventListener('click', function () {
@@ -449,10 +449,7 @@ function init() {
 
                         return searchGoods;
                      })
-                     .then(function (data) {
-                        data.forEach(createCardGood);
-                     });
-
+                     .then(data => data.forEach(createCardGood));
                });
 
             });
