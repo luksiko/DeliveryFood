@@ -5,7 +5,7 @@ const buttonAuth = document.querySelector('.button-auth'),
    modal = document.querySelector(".modal"),
    close = document.querySelector(".close"),
    buttonOut = document.querySelector('.button-out'),
-   buttonLogin = document.querySelector('.button-login'),
+   // buttonLogin = document.querySelector('.button-login'),
    modalAuth = document.querySelector('.modal-auth'),
    modalFooter = document.querySelector('#logInForm .modal-footer'),
    closeAuth = document.querySelector('.close-auth'),
@@ -19,7 +19,7 @@ const buttonAuth = document.querySelector('.button-auth'),
    menu = document.querySelector('.menu'),
    logo = document.querySelector('.logo'),
    cardsMenu = document.querySelector('.cards-menu'),
-   cardRest = document.querySelector('.card-restaurant'),
+   // cardRest = document.querySelector('.card-restaurant'),
    restaurantTitle = document.querySelector('.restaurant-title'),
    rating = document.querySelector('.rating'),
    category = document.querySelector('.category'),
@@ -53,7 +53,7 @@ const getData = async function (url) {
       throw new Error(`Ошибка по адресу ${url}, статус ошибки ${response.status}!`)
    }
    return await response.json();
-};
+}
 
 
 // modalAuth.classList.add('hello');   //* свойства функции classList
@@ -92,7 +92,7 @@ function authorized() {
       cart.length = 0; //! если у нас константа, можем ее обнулить с помощью length=0
       localStorage.removeItem('gloDelivery');
       buttonAuth.style.display = '';
-      buttonOut.style.display = '';
+      buttonOut.style.display = ''
       userName.style.display = '';
       cartButton.style.display = '';
       buttonOut.removeEventListener('click', logOut);
@@ -110,10 +110,10 @@ function authorized() {
    loadCart(); //* при авторизации проверяем, есть ли у юзера товары, если да пишем их в корзину
 }
 
-function maskInput(string) {
+/* function maskInput(string) {
    return !!string.trim();
 }
-
+ */
 function notAuthorized() {
    console.log("Не авторизован");
 
