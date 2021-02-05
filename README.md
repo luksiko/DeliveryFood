@@ -1,4 +1,6 @@
-delivery-food.loc
+#delivery-food.loc
 
-JS Intensive | We Develop the "Delivery Food" on JavaScript
+https://luksiko.github.io/DeliveryFood/
+
+##JS Intensive | We Develop the "Delivery Food" on JavaScript
 
